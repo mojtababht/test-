@@ -54,7 +54,7 @@ jobs:
           -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = "${{ steps.expose.outputs.TUNNEL_URL }}"|g' \
           -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "dd097efe-c317-49e5-9beb-0ff255ed67ad"|g' \
           code.gs > code/out_code.gs
-          
+          echo "1"
           PROJECT_PATH="./code"
           declare -A DEPLOY_IDS=()
           declare -A SCRIPT_IDS=(
@@ -64,7 +64,7 @@ jobs:
             [4]="${{secrets.SCRIPT_ID_ACCOUNT4}}"
             [5]="${{secrets.SCRIPT_ID_ACCOUNT5}}"
           )
-          
+          echo "2"
           declare -A CLASP_CREDS=(
             [1]="${{secrets.CLASP_CRED_1}}"
             [2]="${{secrets.CLASP_CRED_2}}"
@@ -72,8 +72,9 @@ jobs:
             [4]="${{secrets.CLASP_CRED_4}}"
             [5]="${{secrets.CLASP_CRED_5}}"
           )
-          
+          echo "3"
           for acc in {1..5}; do
+            echo "4"
           
             echo $CLASP_CRED[$acc] > ~/.clasprc.json
           
