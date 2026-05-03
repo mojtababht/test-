@@ -95,9 +95,11 @@ jobs:
           
             echo "Account $acc -> Deploy ID: @$DEPLOY_ID"
             $DEPLOY_IDS[$acc] = $DEPL
+            done
           echo "ids \n"
           for i in {1..5}; do
             echo "$DEPLOY_IDS[$i] \n"
+            done
           
 
           sleep 21000
