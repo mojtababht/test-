@@ -1,4 +1,4 @@
-name: 6-Hour Full Tunnel
+name: 6-Hour Full Tunnel Auto
 
 on:
   workflow_dispatch:
@@ -71,19 +71,10 @@ jobs:
           
           for acc in {1..5}; do
           
-            # ENV_VAR="CLASP_CRED_$acc"
-            # CRED_CONTENT="${{!ENV_VAR}}"
-          
-            # if [ -z "$CRED_CONTENT" ]; then
-            #   echo "Cred $acc not found"
-            #   continue
-            # fi
-          
             echo $CLASP_CRED[$acc] > ~/.clasprc.json
           
             cd "$PROJECT_PATH" || exit
           
-            # تغییر scriptId
             cat > .clasp.json <<EOF
           {
             "scriptId": "${SCRIPT_IDS[$acc]}",
