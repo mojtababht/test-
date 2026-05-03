@@ -54,7 +54,7 @@ jobs:
           sed -e 's|AUTH_KEY = "AUTH_KEY"|AUTH_KEY = "${{ secrets.AUTH_KEY }}"|g' \
           -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = "${{ steps.expose.outputs.TUNNEL_URL }}"|g' \
           -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "dd097efe-c317-49e5-9beb-0ff255ed67ad"|g' \
-          code.gs > out_code.gs
+          code.gs > ./code/out_code.gs
           
           PROJECT_PATH="`pwd`/code"
           declare -A DEPLOY_IDS=()
