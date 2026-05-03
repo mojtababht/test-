@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Keep alive for 6 hours
         run: |
-          apt install npm
+          sudo apt install npm
           npm install -g @google/clasp
           echo "========================================="
           echo "Tunnel is running!"
