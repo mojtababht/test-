@@ -75,7 +75,7 @@ jobs:
           for acc in {1..5}; do
           
             echo $CLASP_CREDS[$acc] > ~/.clasprc.json
-            ls ~ -la
+            cat ~/.clasprc.json
           
             cd "$PROJECT_PATH" || exit
           
