@@ -81,7 +81,7 @@ jobs:
           
             cat > .clasp.json <<EOF
           {
-            "scriptId": "${SCRIPT_IDS[$acc]}",
+            "scriptId": "$SCRIPT_IDS[$acc]",
             "rootDir": "./code"
           }
           EOF
