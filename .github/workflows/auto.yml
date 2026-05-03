@@ -74,14 +74,14 @@ jobs:
           )
           for acc in {1..5}; do
           
-            echo CLASP_CREDS[$acc] > ~/.clasprc.json
+            echo ${CLASP_CREDS[$acc]} > ~/.clasprc.json
             cat ~/.clasprc.json
           
             cd "$PROJECT_PATH" || exit
           
             cat > .clasp.json <<EOF
           {
-            "scriptId": "$SCRIPT_IDS[$acc]",
+            "scriptId": "${SCRIPT_IDS[$acc]}",
             "rootDir": "./code"
           }
           EOF
