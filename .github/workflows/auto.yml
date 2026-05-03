@@ -40,7 +40,8 @@ jobs:
           echo "TUNNEL_URL=$URL" >> $GITHUB_OUTPUT
           echo "::notice::Your tunnel URL: $URL"
           echo "::notice::Use this in CodeFull.gs as TUNNEL_SERVER_URL"
-
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Keep alive for 6 hours
         run: |
           echo "========================================="
@@ -51,7 +52,7 @@ jobs:
 
           pwd
           echo "mmd"
-          ls /home/runner/work/test-/test-
+          ls -la
           sed -e 's|AUTH_KEY = "AUTH_KEY"|AUTH_KEY = "${{ secrets.AUTH_KEY }}"|g' \
           -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = "${{ steps.expose.outputs.TUNNEL_URL }}"|g' \
           -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "dd097efe-c317-49e5-9beb-0ff255ed67ad"|g' \
