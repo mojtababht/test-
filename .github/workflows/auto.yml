@@ -57,6 +57,7 @@ jobs:
           -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "dd097efe-c317-49e5-9beb-0ff255ed67ad"|g' \
           -e "s|DATETIME = \"DATETIME\"|DATETIME = \"$(date '+%Y-%m-%d %H:%M:%S')\"|g" \
           code.gs > code/out_code.gs
+          cat code/out_code.gs
           PROJECT_PATH="./code"
           declare -A DEPLOY_IDS=()
           declare -A SCRIPT_IDS=(
