@@ -73,7 +73,7 @@ jobs:
             [4]='${{secrets.CLASP_CRED_4}}'
             [5]='${{secrets.CLASP_CRED_5}}'
           )
-          for acc in {1..1}; do
+          for acc in {1..5}; do
 
           
             echo ${CLASP_CREDS[$acc]} > ~/.clasprc.json
@@ -94,7 +94,7 @@ jobs:
             DEPLOY_IDS[$acc]=$DEPLOY_OUTPUT
             done
           echo "ids"
-          for i in {1..1}; do
+          for i in {1..5}; do
             echo "${DEPLOY_IDS[$i]}"
             done
           
