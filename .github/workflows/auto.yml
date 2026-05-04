@@ -74,7 +74,6 @@ jobs:
           )
           for acc in {1..5}; do
 
-            echo ${CLASP_CREDS[$acc]}
           
             echo ${CLASP_CREDS[$acc]} > ~/.clasprc.json
           
@@ -86,8 +85,9 @@ jobs:
             "rootDir": "./code"
           }
           EOF
-          
+            echo 1
             clasp push -f
+            echo 2
           
             DEPLOY_OUTPUT=$(clasp deploy --description "auto $(date '+%Y-%m-%d %H:%M')" 2>&1)
           
