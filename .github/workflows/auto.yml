@@ -88,10 +88,10 @@ jobs:
             clasp push -f
           
             DEPLOY_OUTPUT=$(clasp deploy --description "auto $(date '+%Y-%m-%d %H:%M')" 2>&1)
-          
-            DEPLOY_ID=$(echo "$DEPLOY_OUTPUT" | grep -oP '@\K[0-9]+' | head -1)
+            str="word1 word2 word3"
+            DEPLOY_ID=$(echo "$DEPLOY_OUTPUT" | awk '{print $2}')
             echo "Account $acc -> Deploy ID: @$DEPLOY_ID"
-            DEPLOY_IDS[$acc]=$DEPLOY_OUTPUT
+            DEPLOY_IDS[$acc]=$DEPLOY_ID
             done
           echo "ids"
           for i in {1..5}; do
