@@ -88,6 +88,7 @@ jobs:
             clasp push -f
           
             DEPLOY_OUTPUT=$(clasp deploy --description "auto $(date '+%Y-%m-%d %H:%M')" 2>&1)
+            echo $DEPLOY_OUTPUT
           
             DEPLOY_ID=$(echo "$DEPLOY_OUTPUT" | grep -oP '@\K[0-9]+' | head -1)
           
