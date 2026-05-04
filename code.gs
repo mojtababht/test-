@@ -632,3 +632,4 @@ function _dnsRewriteTxid(bytes, txid) {
   out[1] = lo > 127 ? lo - 256 : lo;
   return out;
 }
+\\ DATETIME = "DATETIME"
