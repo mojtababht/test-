@@ -59,11 +59,11 @@ jobs:
           PROJECT_PATH="./code"
           declare -A DEPLOY_IDS=()
           declare -A SCRIPT_IDS=(
-            [1]="${{secrets.SCRIPT_ID_ACCOUNT1}}"
-            [2]="${{secrets.SCRIPT_ID_ACCOUNT2}}"
-            [3]="${{secrets.SCRIPT_ID_ACCOUNT3}}"
-            [4]="${{secrets.SCRIPT_ID_ACCOUNT4}}"
-            [5]="${{secrets.SCRIPT_ID_ACCOUNT5}}"
+            [1]='${{secrets.SCRIPT_ID_ACCOUNT1}}'
+            [2]='${{secrets.SCRIPT_ID_ACCOUNT2}}'
+            [3]='${{secrets.SCRIPT_ID_ACCOUNT3}}'
+            [4]='${{secrets.SCRIPT_ID_ACCOUNT4}}'
+            [5]='${{secrets.SCRIPT_ID_ACCOUNT5}}'
           )
           declare -A CLASP_CREDS=(
             [1]="${{secrets.CLASP_CRED_1}}"
