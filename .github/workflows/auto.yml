@@ -90,7 +90,6 @@ jobs:
             DEPLOY_OUTPUT=$(clasp deploy --description "auto $(date '+%Y-%m-%d %H:%M')" 2>&1)
           
             DEPLOY_ID=$(echo "$DEPLOY_OUTPUT" | grep -oP '@\K[0-9]+' | head -1)
-          ‍‍  clasp deployments
             echo "Account $acc -> Deploy ID: @$DEPLOY_ID"
             DEPLOY_IDS[$acc]=$DEPLOY_OUTPUT
             done
