@@ -60,7 +60,7 @@ jobs:
           
 
           sed -e 's|AUTH_KEY = "AUTH_KEY"|AUTH_KEY = "${{ secrets.AUTH_KEY }}"|g' \
-          -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = $URL|g' \
+          -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = \"$URL\"|g' \
           -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "${{ secrets.TUNNEL_AUTH_KEY }}"|g' \
           -e "s|DATETIME = \"DATETIME\"|DATETIME = \"$(date '+%Y-%m-%d %H:%M:%S')\"|g" \
           code.gs > code/out_code.gs
