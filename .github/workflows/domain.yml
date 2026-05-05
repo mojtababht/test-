@@ -1,0 +1,118 @@
+name: Quick Tunnel (No Domain)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tunnel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Start mhrv-tunnel-node
+        run: |
+          docker run -d --name mhrv-tunnel \
+            -p 8080:8080 \
+            -e TUNNEL_AUTH_KEY=${{ secrets.TUNNEL_AUTH_KEY }} \
+            ghcr.io/therealaleph/mhrv-tunnel-node:latest
+          sleep 5
+
+      - name: Install cloudflared
+        run: |
+          curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared.deb
+
+      - name: Start quick tunnel and display URL
+        run: |
+          npm install -g @google/clasp
+          # Start tunnel
+          cloudflared tunnel --url http://localhost:8080 2>&1 | tee tunnel.log &
+          TUNNEL_PID=$!
+          
+          # Wait for tunnel to establish
+          sleep 10
+          
+          # Extract URL from logs
+          URL=$(grep -o 'https://[a-zA-Z0-9.-]*\.trycloudflare\.com' tunnel.log | head -1)
+          
+          # Save URL for later steps
+          echo "TUNNEL_URL=$URL" >> $GITHUB_ENV
+          
+          echo "========================================="
+          echo "✅ QUICK TUNNEL ACTIVE"
+          echo "========================================="
+          echo "🔗 TUNNEL_URL: $URL"
+          echo "🔑 TUNNEL_AUTH_KEY: ${{ secrets.TUNNEL_AUTH_KEY }}"
+          echo "========================================="
+          echo ""
+          echo "⚠️  YOU MUST UPDATE YOUR GOOGLE APPS SCRIPT:"
+          echo "========================================="
+          echo "const TUNNEL_SERVER_URL = \"$URL\";"
+          echo "const TUNNEL_AUTH_KEY = \"${{ secrets.TUNNEL_AUTH_KEY }}\";"
+          echo "========================================="
+          echo ""
+          echo "⏰ Tunnel running for 6 hours"
+          echo "📋 Save the URL above - you'll need to redeploy GAS"
+          echo ""
+
+          
+
+          sed -e 's|AUTH_KEY = "AUTH_KEY"|AUTH_KEY = "${{ secrets.AUTH_KEY }}"|g' \
+          -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = "$URL"|g' \
+          -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "${{ secrets.TUNNEL_AUTH_KEY }}"|g' \
+          -e "s|DATETIME = \"DATETIME\"|DATETIME = \"$(date '+%Y-%m-%d %H:%M:%S')\"|g" \
+          code.gs > code/out_code.gs
+
+          PROJECT_PATH="./code"
+          declare -A DEPLOY_IDS=()
+          declare -A SCRIPT_IDS=(
+            [1]='${{secrets.SCRIPT_ID_ACCOUNT1}}'
+            [2]='${{secrets.SCRIPT_ID_ACCOUNT2}}'
+            [3]='${{secrets.SCRIPT_ID_ACCOUNT3}}'
+            [4]='${{secrets.SCRIPT_ID_ACCOUNT4}}'
+            [5]='${{secrets.SCRIPT_ID_ACCOUNT5}}'
+          )
+          declare -A CLASP_CREDS=(
+            [1]='${{secrets.CLASP_CRED_1}}'
+            [2]='${{secrets.CLASP_CRED_2}}'
+            [3]='${{secrets.CLASP_CRED_3}}'
+            [4]='${{secrets.CLASP_CRED_4}}'
+            [5]='${{secrets.CLASP_CRED_5}}'
+          )
+          for acc in {1..5}; do
+
+          
+            echo ${CLASP_CREDS[$acc]} > ~/.clasprc.json
+          
+          
+            cat > .clasp.json <<EOF
+          {
+            "scriptId": "${SCRIPT_IDS[$acc]}",
+            "rootDir": "./code"
+          }
+          EOF
+            clasp push -f
+          
+            DEPLOY_OUTPUT=$(clasp deploy --description "auto $(date '+%Y-%m-%d %H:%M')" 2>&1)
+            str="word1 word2 word3"
+            DEPLOY_ID=$(echo "$DEPLOY_OUTPUT" | awk '{print $2}')
+            echo "Account $acc -> Deploy ID: @$DEPLOY_ID"
+            DEPLOY_IDS[$acc]=$DEPLOY_ID
+            done
+          echo "ids"
+          for i in {1..5}; do
+            echo "${DEPLOY_IDS[$i]}"
+            done
+          
+
+          
+          # Keep alive for 6 hours
+          sleep 21000
+          
+          # Cleanup
+          kill $TUNNEL_PID 2>/dev/null || true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop mhrv-tunnel || true
+          pkill cloudflared || true
