@@ -94,6 +94,7 @@ jobs:
             "rootDir": "./code"
           }
           EOF
+            clasp deployments | grep -v '@HEAD' | awk '{print $2}' | xargs -I {} clasp undeploy {}
             clasp push -f
           
             DEPLOY_OUTPUT=$(clasp deploy --description "auto $(date '+%Y-%m-%d %H:%M')" 2>&1)
