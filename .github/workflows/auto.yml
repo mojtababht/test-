@@ -15,7 +15,7 @@ jobs:
         run: |
           docker run -d --name mhrv-tunnel \
             -p 8080:8080 \
-            -e TUNNEL_AUTH_KEY=dd097efe-c317-49e5-9beb-0ff255ed67ad \
+            -e TUNNEL_AUTH_KEY=${{ secrets.TUNNEL_AUTH_KEY }} \
             ghcr.io/therealaleph/mhrv-tunnel-node:latest
           sleep 5
           curl -s http://localhost:8080/health || echo "Waiting for tunnel-node..."
@@ -48,12 +48,12 @@ jobs:
           echo "========================================="
           echo "Tunnel is running!"
           echo "CodeFull.gs TUNNEL_SERVER_URL = ${{ steps.expose.outputs.TUNNEL_URL }}"
-          echo "TUNNEL_AUTH_KEY = dd097efe-c317-49e5-9beb-0ff255ed67ad"
+          echo "TUNNEL_AUTH_KEY = ${{ secrets.TUNNEL_AUTH_KEY }}"
           echo "========================================="
 
           sed -e 's|AUTH_KEY = "AUTH_KEY"|AUTH_KEY = "${{ secrets.AUTH_KEY }}"|g' \
           -e 's|TUNNEL_SERVER_URL = "TUNNEL_SERVER_URL"|TUNNEL_SERVER_URL = "${{ steps.expose.outputs.TUNNEL_URL }}"|g' \
-          -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "dd097efe-c317-49e5-9beb-0ff255ed67ad"|g' \
+          -e 's|TUNNEL_AUTH_KEY = "TUNNEL_AUTH_KEY"|TUNNEL_AUTH_KEY = "${{ secrets.TUNNEL_AUTH_KEY }}"|g' \
           -e "s|DATETIME = \"DATETIME\"|DATETIME = \"$(date '+%Y-%m-%d %H:%M:%S')\"|g" \
           code.gs > code/out_code.gs
 
